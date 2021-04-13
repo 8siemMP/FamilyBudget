@@ -1,8 +1,8 @@
 import django_filters.rest_framework
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import viewsets, permissions
 
-from users.serializers import UserSerializer, GroupSerializer
+from users.serializers import UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
