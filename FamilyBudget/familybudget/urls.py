@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from budgets.views import BudgetViewSet
+from budgets.views import BudgetViewSet, PrivilegeManagementViewSet
 from users.views import UserViewSet
 
 
@@ -27,6 +27,12 @@ router.register(r'budgets', BudgetViewSet, basename='budget')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('budgets/<int:budget_pk>/privileges/<int:user_pk>/',
+         PrivilegeManagementViewSet.as_view(actions={
+             'get': 'retrieve',
+             'delete': 'destroy',
+             'post': 'create'
+         })),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
 ]

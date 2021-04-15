@@ -1,14 +1,5 @@
 from django.contrib import admin
-from budgets.models import Budget, Privilege
+from budgets.models import Budget
 
 
-class PrivilegeInline(admin.TabularInline):
-    model = Privilege
-    extra = 1
-
-
-class BudgetAdmin(admin.ModelAdmin):
-    inlines = (PrivilegeInline,)
-
-
-admin.site.register(Budget, BudgetAdmin)
+admin.site.register(Budget)
