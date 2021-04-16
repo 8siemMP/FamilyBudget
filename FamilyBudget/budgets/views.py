@@ -4,7 +4,7 @@ from rest_framework import viewsets, permissions, mixins
 from rest_framework.viewsets import GenericViewSet
 
 from budgets.models import Budget
-from budgets.permissions import HasBudgetPermission
+from budgets.permissions import HasBudgetPermission, IsBudgetOwner
 from budgets.serializers import BudgetSerializer, PrivilegeSerializer
 
 User = get_user_model()
@@ -27,7 +27,7 @@ class PrivilegeManagementViewSet(mixins.CreateModelMixin,
                                  mixins.DestroyModelMixin,
                                  GenericViewSet):
     serializer_class = PrivilegeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsBudgetOwner]
 
     _budget = None
 
@@ -43,7 +43,15 @@ class PrivilegeManagementViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         user_id = "%d" % self.kwargs['user_pk']
-        permission = self.request.data['permission'][0]
+        permission_name = self.request.data['permission']
+
+        if permission_name == 'Owner':
+            raise Exception('Owner is immutable')
+        elif permission_name == 'None':
+            raise Exception('To take permission out use DELETE method')
+
+        assert permission_name in ['Editor', 'Read-only']
+        permission = permission_name[0]
         assert permission in Budget.PERMISSION.keys()
         self.budget.privileges[user_id] = permission
         self.budget.save()
