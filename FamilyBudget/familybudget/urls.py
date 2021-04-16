@@ -18,12 +18,14 @@ from django.urls import path, include
 from rest_framework import routers
 
 from budgets.views import BudgetViewSet, PrivilegeManagementViewSet
+from categories.views import CategoryViewSet
 from users.views import UserViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'budgets', BudgetViewSet, basename='budget')
+router.register(r'categories', CategoryViewSet, basename='category')
 
 urlpatterns = [
     path('', include(router.urls)),

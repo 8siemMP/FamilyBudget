@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from rest_framework import viewsets, permissions, mixins
+from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import GenericViewSet
 
 from budgets.models import Budget
@@ -46,13 +47,13 @@ class PrivilegeManagementViewSet(mixins.CreateModelMixin,
         permission_name = self.request.data['permission']
 
         if permission_name == 'Owner':
-            raise Exception('Owner is immutable')
+            raise ValidationError('Owner is immutable')
         elif permission_name == 'None':
-            raise Exception('To take permission out use DELETE method')
+            raise ValidationError('To take permission out use DELETE method')
 
-        assert permission_name in ['Editor', 'Read-only']
+        if permission_name not in ['Editor', 'Read-only']:
+            raise ValidationError('Valid permission values are: "Editor" and "Read-only"')
         permission = permission_name[0]
-        assert permission in Budget.PERMISSION.keys()
         self.budget.privileges[user_id] = permission
         self.budget.save()
 
