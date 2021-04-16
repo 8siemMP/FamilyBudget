@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Sum
 from django.db.models.signals import post_delete
 
 User = get_user_model()
@@ -24,6 +25,10 @@ class Budget(models.Model):
             return self.PERMISSION[self.privileges[f'{user_pk}']]
         except KeyError:
             return 'None'
+
+    @property
+    def summary(self):
+        return self.entries.aggregate(Sum('amount'))['amount__sum']
 
     def __str__(self):
         return self.name

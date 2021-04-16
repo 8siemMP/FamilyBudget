@@ -41,4 +41,4 @@ class BudgetSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ['name', 'url', 'owner', 'entries', 'privileges']
+        fields = ['name', 'url', 'owner', 'entries', 'summary', 'privileges']
