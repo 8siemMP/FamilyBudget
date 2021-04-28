@@ -38,6 +38,8 @@ class PrivilegesField(serializers.Field):
 
 class BudgetSerializer(serializers.HyperlinkedModelSerializer):
     privileges = PrivilegesField(read_only=True)
+    owner = serializers.HyperlinkedRelatedField(view_name='user-detail', read_only=True, required=False)
+    entries = serializers.HyperlinkedRelatedField(view_name='entry-detail', read_only=True, required=False, many=True)
 
     class Meta:
         model = Budget

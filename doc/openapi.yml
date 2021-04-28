@@ -1,0 +1,846 @@
+openapi: 3.0.2
+info:
+  title: 'API for managing simple budgets'
+  version: '0.0.1'
+paths:
+  /users/:
+    get:
+      operationId: listUsers
+      description: Showing list of users.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/users/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/users/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - users
+    post:
+      operationId: createUser
+      description: Creating a new user
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - users
+  /users/{id}/:
+    get:
+      operationId: retrieveUser
+      description: Shows singe user details.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - users
+    put:
+      operationId: updateUser
+      description: Updates user data.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - users
+    patch:
+      operationId: partialUpdateUser
+      description: Updates partial user data.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+      tags:
+      - users
+    delete:
+      operationId: destroyUser
+      description: Removes user and deletes all his budgets.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - users
+  /budgets/:
+    get:
+      operationId: listBudgets
+      description: List of budgets owned by or permitted to user
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: name
+        required: false
+        in: query
+        description: The phrase by which you want to filter budget names.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/budgets/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/budgets/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Budget'
+          description: ''
+      tags:
+      - budgets
+    post:
+      operationId: createBudget
+      description: Creates new budget owned by logged user. On input API takes objects ID's instead of uri's like in GET method in fields relating to other objects
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+          description: ''
+      tags:
+      - budgets
+  /budgets/{id}/:
+    get:
+      operationId: retrieveBudget
+      description: 'Shows details about singe budget'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+          description: ''
+      tags:
+      - budgets
+    put:
+      operationId: updateBudget
+      description: 'Updates budget info'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+          description: ''
+      tags:
+      - budgets
+    patch:
+      operationId: partialUpdateBudget
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Budget'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Budget'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Budget'
+          description: ''
+      tags:
+      - budgets
+    delete:
+      operationId: destroyBudget
+      description: 'Deletes budget object and all linked categories and entries'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - budgets
+  /categories/:
+    get:
+      operationId: listCategorys
+      description: 'Shows list of categories'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: name
+        required: false
+        in: query
+        description: The phrase by which you want to filter category names.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/categories/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/categories/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - categories
+    post:
+      operationId: createCategory
+      description: Creates a new category
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - categories
+  /categories/{id}/:
+    get:
+      operationId: retrieveCategory
+      description: 'Shows details about category'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - categories
+    put:
+      operationId: updateCategory
+      description: 'Updates category data'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - categories
+    patch:
+      operationId: partialUpdateCategory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - categories
+    delete:
+      operationId: destroyCategory
+      description: 'Deletes category, entries become unassigned but not deleted'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - categories
+  /entries/:
+    get:
+      operationId: listEntrys
+      description: 'Shows list of all entries from all budgets'
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/entries/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/entries/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entry'
+          description: ''
+      tags:
+      - entries
+    post:
+      operationId: createEntry
+      description: Creates new entry to budget
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Entry'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+      tags:
+      - entries
+  /entries/{id}/:
+    get:
+      operationId: retrieveEntry
+      description: 'Shows details about entry'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+      tags:
+      - entries
+    put:
+      operationId: updateEntry
+      description: 'updates entry data'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Entry'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+      tags:
+      - entries
+    patch:
+      operationId: partialUpdateEntry
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Entry'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Entry'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entry'
+          description: ''
+      tags:
+      - entries
+    delete:
+      operationId: destroyEntry
+      description: 'Removes entry'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - entries
+  /budgets/{budget_pk}/privileges/{user_pk}/:
+    get:
+      operationId: retrievePrivilege
+      description: 'Shows privileges of user for budget'
+      parameters:
+      - name: budget_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: user_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Privilege'
+          description: ''
+      tags:
+      - budgets
+    post:
+      operationId: createPrivilege
+      description: 'Sets user priveges for budget'
+      parameters:
+      - name: budget_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: user_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: "Possible values are: 'Read-Only', 'Editor', 'Owner' and 'None'"
+                  example: Editor
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Privilege'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Privilege'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Privilege'
+          description: ''
+      tags:
+      - budgets
+    delete:
+      operationId: destroyPrivilege
+      description: 'Removes user privilege for budget'
+      parameters:
+      - name: budget_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      - name: user_pk
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - budgets
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        is_staff:
+          type: boolean
+          description: Designates whether the user can log into this admin site.
+      required:
+      - username
+    Budget:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Penguins budget
+        url:
+          type: uri
+          readOnly: true
+          example: http://localhost:8000/budgets/1/
+        owner:
+          type: uri
+          example: http://localhost:8000/users/3/
+        entries:
+          type: array
+          items:
+            type: uri
+            example: http://localhost:8000/entries/2/
+        summary:
+          type: number
+          readOnly: true
+          example: 1203.02
+        privileges:
+          type: string
+          readOnly: true
+      required:
+      - owner
+      - entries
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: groceries
+        budget:
+          type: uri
+          example: http://localhost:8000/budgets/1/
+        entries:
+          type: array
+          items:
+            type: uri
+            example: http://localhost:8000/entries/2/
+        url:
+          type: uri
+          readOnly: true
+          example: http://localhost:8000/categories/3/
+      required:
+      - name
+      - budget
+      - entries
+    Entry:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: fish
+        budget:
+          type: uri
+          example: http://localhost:8000/budgets/1/
+        amount:
+          type: number
+          example: 4.50
+        category:
+          type: uri
+          nullable: true
+          example: http://localhost:8000/categories/2/
+        url:
+          type: uri
+          readOnly: true
+          example: http://localhost:8000/entries/3/
+      required:
+      - budget
+    Privilege:
+      type: object
+      properties:
+        user:
+          type: string
+          format: uri
+          readOnly: true
+          example: http://localhost:8000/users/1/
+        permission:
+          type: string
+          description:
+                "Possible values are: 'Read-Only', 'Editor', 'Owner' and 'None'"
+          example: Editor
+      required:
+      - permission

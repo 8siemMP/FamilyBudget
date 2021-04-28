@@ -16,5 +16,5 @@ class AbstactBudgetPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return f'{request.user.id}' in budget.privileges
 
-        if request.method == 'PUT':
+        if request.method in ('PUT', 'PATCH'):
             return budget.privileges.get(f'{request.user.id}', None) == 'E'
